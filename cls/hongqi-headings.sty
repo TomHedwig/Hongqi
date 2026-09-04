@@ -1,0 +1,116 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hongqi-headings}[2026/09/02 v0.1 Hongqi headings]
+
+\RequirePackage{xparse}
+\RequirePackage{expl3}
+
+\ExplSyntaxOn
+\tl_new:N \l_hongqi_article_title_tl
+\tl_new:N \l_hongqi_article_author_tl
+\tl_new:N \l_hongqi_article_kicker_tl
+\tl_new:N \l_hongqi_article_style_tl
+
+\keys_define:nn { hongqi / article }
+  {
+    title  .tl_set:N = \l_hongqi_article_title_tl,
+    author .tl_set:N = \l_hongqi_article_author_tl,
+    kicker .tl_set:N = \l_hongqi_article_kicker_tl,
+    style  .choice:,
+    style / normal   .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { normal } },
+    style / major    .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { major } },
+    style / document .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { document } },
+    style .initial:n = normal
+  }
+
+\cs_new_protected:Npn \hongqi_print_article_heading:
+  {
+    \clearpage
+    \thispagestyle{hongqi}
+    \tl_if_blank:VTF \l_hongqi_article_kicker_tl
+      { }
+      {
+        \begin{center}
+          \fbox{\parbox{.72\textwidth}{\centering\hongqihei\bfseries
+          \fontsize{10.5pt}{14pt}\selectfont \l_hongqi_article_kicker_tl}}
+        \end{center}
+        \vspace{8mm}
+      }
+    \begin{center}
+      \str_case:VnF \l_hongqi_article_style_tl
+        {
+          {major}{\hongqihei\bfseries\fontsize{28pt}{35pt}\selectfont}
+          {document}{\hongqihei\bfseries\fontsize{25pt}{32pt}\selectfont}
+        }
+        {\hongqisong\bfseries\fontsize{22pt}{29pt}\selectfont}
+      \l_hongqi_article_title_tl\par
+      \tl_if_blank:VTF \l_hongqi_article_author_tl
+        { }
+        {
+          \vspace{7mm}
+          {\hongqikai\normalfont\fontsize{10.5pt}{14pt}\selectfont
+           \l_hongqi_article_author_tl\par}
+        }
+    \end{center}
+    \vspace{7mm}
+  }
+
+\NewDocumentEnvironment{hongqiarticle}{m}
+  {
+    \group_begin:
+    \keys_set:nn { hongqi / article }
+      { title={}, author={}, kicker={}, style=normal, #1 }
+    \hongqi_print_article_heading:
+    \HongqiNormalBody
+  }
+  { \par\group_end: }
+\ExplSyntaxOff
+
+\NewDocumentCommand\HongqiSubheading{m}{%
+  \par\addvspace{.75\baselineskip}%
+  {\hongqihei\bfseries #1\par}%
+  \nobreak\vspace{.2\baselineskip}%
+}
+
+\NewDocumentCommand\HongqiDocumentAgencies{m}{%
+  \begin{center}
+    {\hongqisong\fontsize{13pt}{20pt}\selectfont #1\par}
+  \end{center}
+  \vspace{5mm}
+}
+
+\NewDocumentEnvironment{hongqisloganpage}{}
+  {\clearpage\thispagestyle{empty}\HongqiLargeBody\begin{center}\vspace*{18mm}}
+  {\end{center}\clearpage}
+
+\NewDocumentCommand\HongqiSloganBox{m}{%
+  \fboxrule=1.6pt
+  \fboxsep=10mm
+  \fbox{\parbox{.68\textwidth}{%
+    \centering\hongqihei\bfseries\fontsize{18pt}{32pt}\selectfont #1}}
+}
+
+\NewDocumentEnvironment{hongqitoc}{}
+  {\clearpage\thispagestyle{empty}\HongqiCompactBody}
+  {\clearpage}
+
+\NewDocumentCommand\HongqiTocHeading{}{%
+  \begin{center}
+    \HongqiLogo[30mm]\hfill
+    {\hongqisong\fontsize{11pt}{14pt}\selectfont \HongqiPublisher}\par
+    \vspace{8mm}
+    {\hongqihei\bfseries\fontsize{13pt}{16pt}\selectfont
+      一九七六年第十期\quad 目\quad 录\par}
+  \end{center}
+  \vspace{5mm}
+}
+
+\NewDocumentCommand\HongqiTocEntry{O{}mm}{%
+  \par\noindent
+  \if\relax\detokenize{#1}\relax\else
+    {\hongqisong\fontsize{8.5pt}{11pt}\selectfont #1\par\nobreak}
+  \fi
+  {\hongqisong\bfseries\fontsize{12pt}{16pt}\selectfont
+    #2\nobreak\leaders\hbox to .7em{\hss.\hss}\hfill\nobreak
+    \makebox[3em][r]{（#3）}\par}
+  \vspace{2mm}
+}

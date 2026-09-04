@@ -1,0 +1,110 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hongqi-covers}[2026/09/03 v0.2 Hongqi covers]
+\RequirePackage{tikz}
+
+% 封面专用坐标均以纸张左上角为原点，单位 mm；不受单双页版心影响。
+% 二值扫描仅作为图像素材，文字、边框和出版资料仍由 LaTeX 排版。
+\pgfkeys{/hongqi/covers/.is family, /hongqi/covers,
+  scan-image/.store in=\HongqiCoverScan,
+  portrait-image/.store in=\HongqiPortraitImage,
+  logo-image/.store in=\HongqiLogoImage,
+  issue-line/.store in=\HongqiCoverIssueLine,
+  back-issue-line/.store in=\HongqiBackIssueLine,
+  editor/.store in=\HongqiCoverEditor,
+  publisher/.store in=\HongqiCoverPublisher,
+  address/.store in=\HongqiCoverAddress,
+  printer/.store in=\HongqiCoverPrinter,
+  distributor/.store in=\HongqiCoverDistributor,
+  subscriptions/.store in=\HongqiCoverSubscriptions,
+  retail/.store in=\HongqiCoverRetail,
+  code/.store in=\HongqiCoverCode,
+  price/.store in=\HongqiCoverPrice,
+  frame-width/.store in=\HongqiCoverFrameWidth,
+  scan-image={}, portrait-image={}, logo-image={},
+  issue-line={}, back-issue-line={}, editor={}, publisher={}, address={},
+  printer={}, distributor={}, subscriptions={}, retail={}, code={}, price={},
+  frame-width=3pt
+}
+\NewDocumentCommand\HongqiCoverSetup{m}{\pgfkeys{/hongqi/covers,#1}}
+
+% 原图 1266 x 1592 px，viewport 使用自然尺寸 bp，裁切只在排版时发生。
+% 书法刊名区域 x=75..350, y=1350..1502（图像左上坐标）。
+\NewDocumentCommand\HongqiLogo{O{43mm}}{%
+  \ifx\HongqiLogoImage\empty
+    \ifx\HongqiCoverScan\empty
+      {\hongqikai\mdseries\fontsize{36pt}{40pt}\selectfont 红旗}%
+    \else
+      \includegraphics[viewport=75 90 350 242,clip,width=#1]{\HongqiCoverScan}%
+    \fi
+  \else
+    \includegraphics[width=#1]{\HongqiLogoImage}%
+  \fi
+}
+
+\newcommand\HongqiCoverPortrait{%
+  \ifx\HongqiPortraitImage\empty
+    \ifx\HongqiCoverScan\empty
+      \parbox[c][219mm][c]{167mm}{\centering 肖像图待补}%
+    \else
+      \includegraphics[viewport=20 280 1014 1565,clip,
+        width=167mm,height=219mm]{\HongqiCoverScan}%
+    \fi
+  \else
+    \parbox[c][219mm][c]{167mm}{\centering
+      \includegraphics[width=167mm,height=219mm,keepaspectratio]{\HongqiPortraitImage}}%
+  \fi
+}
+
+\NewDocumentCommand\HongqiCover{}{%
+  \clearpage\thispagestyle{empty}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \begin{scope}[shift={(current page.north west)},x=1mm,y=-1mm]
+      \node[anchor=north west,inner sep=0] at (10.5,9.5) {\HongqiCoverPortrait};
+      \draw[line width=\HongqiCoverFrameWidth] (8,7) rectangle (180,231);
+      \node[anchor=north west,inner sep=0] at (11,236) {\HongqiLogo[43mm]};
+      \node[anchor=east,inner sep=0,font=\hongqisong\fontsize{13pt}{16pt}\selectfont]
+        at (174,250) {\makebox[74mm][s]{\HongqiCoverIssueLine}};
+    \end{scope}
+  \end{tikzpicture}%
+  \null\clearpage
+}
+
+\newcommand\HongqiColophonRow[2]{%
+  \makebox[21mm][s]{#1}&\makebox[51mm][s]{#2}\\[1mm]
+}
+\newcommand\HongqiColophon{%
+  \begingroup
+  \hongqifang\mdseries\fontsize{8.5pt}{11pt}\selectfont
+  \setlength{\tabcolsep}{0pt}%
+  \renewcommand\arraystretch{1}%
+  \begin{tabular}{@{}l@{\hspace{3mm}}l@{}}
+    \HongqiColophonRow{编辑者}{\HongqiCoverEditor}
+    \makebox[21mm][s]{出版者}&\makebox[51mm][s]{\HongqiCoverPublisher}\\
+    &\makebox[51mm][c]{\fontsize{7pt}{9pt}\selectfont\HongqiCoverAddress}\\[1mm]
+    \HongqiColophonRow{印刷者}{\HongqiCoverPrinter}
+    \HongqiColophonRow{总发行处}{\HongqiCoverDistributor}
+    \HongqiColophonRow{订购处}{\HongqiCoverSubscriptions}
+    \HongqiColophonRow{零售、代销处}{\HongqiCoverRetail}
+  \end{tabular}\par
+  \vspace{-1mm}\noindent\rule{75mm}{0.35pt}\par
+  \noindent{\hongqisong\fontsize{7.5pt}{10pt}\selectfont
+    代号：\HongqiCoverCode\hfill
+    \hongqihei 本期零售每册\HongqiCoverPrice 元}\par
+  \endgroup
+}
+
+% 样本预览直接接封底；正式装订时，调用方在此前补足内封/空白页。
+\NewDocumentCommand\HongqiBackCover{}{%
+  \clearpage\thispagestyle{empty}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \begin{scope}[shift={(current page.north west)},x=1mm,y=-1mm]
+      \node[anchor=north west,inner sep=0] at (31,20) {\HongqiLogo[34mm]};
+      \node[anchor=north west,inner sep=0,
+        font=\hongqihei\fontsize{8pt}{11pt}\selectfont]
+        at (20,43) {\HongqiBackIssueLine};
+      \node[anchor=north west,inner sep=0,text width=75mm] at (101,185)
+        {\HongqiColophon};
+    \end{scope}
+  \end{tikzpicture}%
+  \null\clearpage
+}

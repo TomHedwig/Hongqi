@@ -1,0 +1,19 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hongqi-fonts}[2026/09/02 v0.1 Hongqi font roles]
+
+% 开源默认字体。商业字体只应作为用户本地覆盖项。
+\setmainfont{TeX Gyre Termes}
+\setCJKmainfont[BoldFont=FandolSong-Bold]{FandolSong-Regular}
+\setCJKsansfont[BoldFont=FandolHei-Bold]{FandolHei-Regular}
+\setCJKmonofont{FandolFang-Regular}
+
+\setCJKfamilyfont{hongqisong}[BoldFont=FandolSong-Bold]{FandolSong-Regular}
+\setCJKfamilyfont{hongqihei}[BoldFont=FandolHei-Bold]{FandolHei-Regular}
+\setCJKfamilyfont{hongqikai}{FandolKai-Regular}
+\setCJKfamilyfont{hongqifang}{FandolFang-Regular}
+
+\newcommand\hongqisong{\CJKfamily{hongqisong}}
+\newcommand\hongqihei{\CJKfamily{hongqihei}}
+\newcommand\hongqikai{\CJKfamily{hongqikai}}
+\newcommand\hongqifang{\CJKfamily{hongqifang}}
+

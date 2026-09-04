@@ -1,0 +1,47 @@
+% 将项目的类文件目录加入 TeX 搜索路径；随后可直接运行 xelatex main.tex。
+\makeatletter
+\def\input@path{{../../../cls/}}
+\makeatother
+\documentclass{hongqi}
+
+\input{metadata}
+
+\begin{document}
+
+\HongqiCover
+\input{toc}
+
+\begin{hongqisloganpage}
+  \HongqiSloganBox{伟大的领袖和导师\\
+    毛泽东主席永垂不朽!}
+\end{hongqisloganpage}
+\begin{hongqisloganpage}
+  \HongqiSloganBox{战无不胜的马克思主义、\\
+    列宁主义、毛泽东思想万岁！}
+\end{hongqisloganpage}
+
+\HongqiStartMainMatter{5}{819}
+
+\input{articles/01}
+\input{articles/02}
+\input{articles/03}
+\input{articles/04}
+\input{articles/05}
+\input{articles/06}
+\input{articles/07}
+\input{articles/08}
+\input{articles/09}
+\input{articles/10}
+\input{articles/11}
+\input{articles/12}
+\input{articles/13}
+\input{articles/14}
+\input{articles/15}
+\input{articles/16}
+\input{articles/17}
+\input{articles/18}
+\input{articles/19}
+
+\HongqiBackCover
+
+\end{document}
