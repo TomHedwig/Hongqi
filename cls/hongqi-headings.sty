@@ -9,66 +9,211 @@
 \tl_new:N \l_hongqi_article_author_tl
 \tl_new:N \l_hongqi_article_kicker_tl
 \tl_new:N \l_hongqi_article_style_tl
+\tl_new:N \l_hongqi_kicker_font_tl
+\tl_new:N \l_hongqi_kicker_align_tl
+\dim_new:N \l_hongqi_kicker_size_dim
+\dim_new:N \l_hongqi_kicker_leading_dim
+\dim_new:N \l_hongqi_kicker_width_dim
+\dim_new:N \l_hongqi_kicker_padding_dim
+\dim_new:N \l_hongqi_kicker_rule_dim
+\dim_new:N \l_hongqi_kicker_after_dim
+\fp_new:N \l_hongqi_kicker_line_spacing_fp
+\bool_new:N \l_hongqi_kicker_fixed_leading_bool
+\dim_new:N \l_hongqi_body_size_dim
+\dim_new:N \l_hongqi_body_leading_dim
+\tl_new:N \l_hongqi_body_indent_tl
+\fp_new:N \l_hongqi_body_line_spacing_fp
+\bool_new:N \l_hongqi_body_fixed_leading_bool
+
+\cs_new_protected:Npn \hongqi_set_kicker_size:n #1
+{
+  \str_case:nnF {#1}
+  {
+    {chuhao}   { \dim_set:Nn \l_hongqi_kicker_size_dim {42pt} }
+      {xiaochu}  { \dim_set:Nn \l_hongqi_kicker_size_dim {36pt} }
+      {yihao}    { \dim_set:Nn \l_hongqi_kicker_size_dim {26pt} }
+      {xiaoyi}   { \dim_set:Nn \l_hongqi_kicker_size_dim {24pt} }
+      {erhao}    { \dim_set:Nn \l_hongqi_kicker_size_dim {22pt} }
+      {xiaoer}   { \dim_set:Nn \l_hongqi_kicker_size_dim {18pt} }
+      {sanhao}   { \dim_set:Nn \l_hongqi_kicker_size_dim {16pt} }
+      {xiaosan}  { \dim_set:Nn \l_hongqi_kicker_size_dim {15pt} }
+      {sihao}    { \dim_set:Nn \l_hongqi_kicker_size_dim {14pt} }
+      {xiaosi}   { \dim_set:Nn \l_hongqi_kicker_size_dim {12pt} }
+      {wuhao}    { \dim_set:Nn \l_hongqi_kicker_size_dim {10.5pt} }
+      {xiaowu}   { \dim_set:Nn \l_hongqi_kicker_size_dim {9pt} }
+      {liuhao}   { \dim_set:Nn \l_hongqi_kicker_size_dim {7.5pt} }
+      {xiaoliu}  { \dim_set:Nn \l_hongqi_kicker_size_dim {6.5pt} }
+      {qihao}    { \dim_set:Nn \l_hongqi_kicker_size_dim {5.5pt} }
+      {bahao}    { \dim_set:Nn \l_hongqi_kicker_size_dim {5pt} }
+  }
+  { \dim_set:Nn \l_hongqi_kicker_size_dim {#1} }
+}
+
+\cs_new_protected:Npn \hongqi_set_body_size:n #1
+{
+  \str_case:nnF {#1}
+  {
+    {chuhao}   { \dim_set:Nn \l_hongqi_body_size_dim {42pt} }
+      {xiaochu}  { \dim_set:Nn \l_hongqi_body_size_dim {36pt} }
+      {yihao}    { \dim_set:Nn \l_hongqi_body_size_dim {26pt} }
+      {xiaoyi}   { \dim_set:Nn \l_hongqi_body_size_dim {24pt} }
+      {erhao}    { \dim_set:Nn \l_hongqi_body_size_dim {22pt} }
+      {xiaoer}   { \dim_set:Nn \l_hongqi_body_size_dim {18pt} }
+      {sanhao}   { \dim_set:Nn \l_hongqi_body_size_dim {16pt} }
+      {xiaosan}  { \dim_set:Nn \l_hongqi_body_size_dim {15pt} }
+      {sihao}    { \dim_set:Nn \l_hongqi_body_size_dim {14pt} }
+      {xiaosi}   { \dim_set:Nn \l_hongqi_body_size_dim {12pt} }
+      {wuhao}    { \dim_set:Nn \l_hongqi_body_size_dim {10.5pt} }
+      {xiaowu}   { \dim_set:Nn \l_hongqi_body_size_dim {9pt} }
+      {liuhao}   { \dim_set:Nn \l_hongqi_body_size_dim {7.5pt} }
+      {xiaoliu}  { \dim_set:Nn \l_hongqi_body_size_dim {6.5pt} }
+      {qihao}    { \dim_set:Nn \l_hongqi_body_size_dim {5.5pt} }
+      {bahao}    { \dim_set:Nn \l_hongqi_body_size_dim {5pt} }
+  }
+  { \dim_set:Nn \l_hongqi_body_size_dim {#1} }
+}
 
 \keys_define:nn { hongqi / article }
-  {
-    title  .tl_set:N = \l_hongqi_article_title_tl,
-    author .tl_set:N = \l_hongqi_article_author_tl,
-    kicker .tl_set:N = \l_hongqi_article_kicker_tl,
-    style  .choice:,
-    style / normal   .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { normal } },
-    style / major    .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { major } },
-    style / document .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { document } },
-    style .initial:n = normal
-  }
+{
+  title  .tl_set:N = \l_hongqi_article_title_tl,
+  author .tl_set:N = \l_hongqi_article_author_tl,
+  kicker .tl_set:N = \l_hongqi_article_kicker_tl,
+  kicker-size .code:n = { \hongqi_set_kicker_size:n {#1} },
+  kicker-leading .code:n =
+    {
+      \dim_set:Nn \l_hongqi_kicker_leading_dim {#1}
+      \bool_set_true:N \l_hongqi_kicker_fixed_leading_bool
+    },
+  kicker-line-spacing .code:n =
+    {
+      \fp_set:Nn \l_hongqi_kicker_line_spacing_fp {#1}
+      \bool_set_false:N \l_hongqi_kicker_fixed_leading_bool
+    },
+  kicker-width .dim_set:N = \l_hongqi_kicker_width_dim,
+  kicker-padding .dim_set:N = \l_hongqi_kicker_padding_dim,
+  kicker-rule .dim_set:N = \l_hongqi_kicker_rule_dim,
+  kicker-after .dim_set:N = \l_hongqi_kicker_after_dim,
+  body-size .code:n = { \hongqi_set_body_size:n {#1} },
+  body-leading .code:n =
+    {
+      \dim_set:Nn \l_hongqi_body_leading_dim {#1}
+      \bool_set_true:N \l_hongqi_body_fixed_leading_bool
+    },
+  body-line-spacing .code:n =
+    {
+      \fp_set:Nn \l_hongqi_body_line_spacing_fp {#1}
+      \bool_set_false:N \l_hongqi_body_fixed_leading_bool
+    },
+  body-indent .tl_set:N = \l_hongqi_body_indent_tl,
+  kicker-font .choice:,
+  kicker-font / hei  .code:n = { \tl_set:Nn \l_hongqi_kicker_font_tl { \hongqihei } },
+  kicker-font / song .code:n = { \tl_set:Nn \l_hongqi_kicker_font_tl { \hongqisong } },
+  kicker-font / fang .code:n = { \tl_set:Nn \l_hongqi_kicker_font_tl { \hongqifang } },
+  kicker-font / kai  .code:n = { \tl_set:Nn \l_hongqi_kicker_font_tl { \hongqikai } },
+  kicker-align .choice:,
+  kicker-align / center .code:n = { \tl_set:Nn \l_hongqi_kicker_align_tl { \centering } },
+  kicker-align / left   .code:n = { \tl_set:Nn \l_hongqi_kicker_align_tl { \raggedright } },
+  kicker-align / right  .code:n = { \tl_set:Nn \l_hongqi_kicker_align_tl { \raggedleft } },
+  style  .choice:,
+  style / normal   .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { normal } },
+  style / major    .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { major } },
+  style / document .code:n = { \tl_set:Nn \l_hongqi_article_style_tl { document } },
+  style .initial:n = normal
+}
 
 \cs_new_protected:Npn \hongqi_print_article_heading:
+{
+  \clearpage
+  \thispagestyle{hongqi}
+  \tl_if_blank:VTF \l_hongqi_article_kicker_tl
+  { }
   {
-    \clearpage
-    \thispagestyle{hongqi}
-    \tl_if_blank:VTF \l_hongqi_article_kicker_tl
-      { }
-      {
-        \begin{center}
-          \fbox{\parbox{.72\textwidth}{\centering\hongqihei\bfseries
-          \fontsize{10.5pt}{14pt}\selectfont \l_hongqi_article_kicker_tl}}
-        \end{center}
-        \vspace{8mm}
-      }
+    \bool_if:NF \l_hongqi_kicker_fixed_leading_bool
+    {
+      \dim_set:Nn \l_hongqi_kicker_leading_dim
+      { \fp_use:N \l_hongqi_kicker_line_spacing_fp \l_hongqi_kicker_size_dim }
+    }
     \begin{center}
-      \str_case:VnF \l_hongqi_article_style_tl
-        {
-          {major}{\hongqihei\bfseries\fontsize{28pt}{35pt}\selectfont}
-          {document}{\hongqihei\bfseries\fontsize{25pt}{32pt}\selectfont}
-        }
-        {\hongqisong\bfseries\fontsize{22pt}{29pt}\selectfont}
-      \l_hongqi_article_title_tl\par
-      \tl_if_blank:VTF \l_hongqi_article_author_tl
-        { }
-        {
-          \vspace{7mm}
-          {\hongqikai\normalfont\fontsize{10.5pt}{14pt}\selectfont
-           \l_hongqi_article_author_tl\par}
-        }
+      \dim_set_eq:NN \fboxrule \l_hongqi_kicker_rule_dim
+      \dim_set_eq:NN \fboxsep \l_hongqi_kicker_padding_dim
+      \fbox{\parbox{\l_hongqi_kicker_width_dim}{
+          \tl_use:N \l_hongqi_kicker_align_tl
+          \tl_use:N \l_hongqi_kicker_font_tl \bfseries
+          \fontsize{\l_hongqi_kicker_size_dim}{\l_hongqi_kicker_leading_dim}\selectfont
+          \l_hongqi_article_kicker_tl}}
     \end{center}
-    \vspace{7mm}
+    \vspace{\l_hongqi_kicker_after_dim}
   }
+  \begin{center}
+    \str_case:VnF \l_hongqi_article_style_tl
+    {
+      {major}{\hongqihei\bfseries\fontsize{28pt}{35pt}\selectfont}
+        {document}{\hongqihei\bfseries\fontsize{25pt}{32pt}\selectfont}
+    }
+    {\hongqisong\bfseries\fontsize{22pt}{29pt}\selectfont}
+    \l_hongqi_article_title_tl\par
+    \tl_if_blank:VTF \l_hongqi_article_author_tl
+    { }
+    {
+      \vspace{7mm}
+      {\hongqikai\normalfont\fontsize{10.5pt}{14pt}\selectfont
+        \l_hongqi_article_author_tl\par}
+    }
+  \end{center}
+  \vspace{7mm}
+}
+
+\cs_new_protected:Npn \hongqi_apply_article_body:
+{
+  \bool_if:NF \l_hongqi_body_fixed_leading_bool
+  {
+    \dim_set:Nn \l_hongqi_body_leading_dim
+    { \fp_use:N \l_hongqi_body_line_spacing_fp \l_hongqi_body_size_dim }
+  }
+  \normalfont\hongqisong
+  \fontsize{\l_hongqi_body_size_dim}{\l_hongqi_body_leading_dim}\selectfont
+  \setlength{\parindent}{\tl_use:N \l_hongqi_body_indent_tl}
+  \setlength{\parskip}{0pt}
+}
 
 \NewDocumentEnvironment{hongqiarticle}{m}
+{
+  \group_begin:
+  \dim_set:Nn \l_hongqi_body_size_dim {10.5pt}
+  \dim_set:Nn \l_hongqi_body_leading_dim {15.5pt}
+  \fp_set:Nn \l_hongqi_body_line_spacing_fp {1.5}
+  \bool_set_true:N \l_hongqi_body_fixed_leading_bool
+  \dim_set:Nn \l_hongqi_kicker_size_dim {10.5pt}
+  \dim_set:Nn \l_hongqi_kicker_leading_dim {14pt}
+  \fp_set:Nn \l_hongqi_kicker_line_spacing_fp {1.5}
+  \bool_set_true:N \l_hongqi_kicker_fixed_leading_bool
+  \keys_set:nn { hongqi / article }
   {
-    \group_begin:
-    \keys_set:nn { hongqi / article }
-      { title={}, author={}, kicker={}, style=normal, #1 }
-    \hongqi_print_article_heading:
-    \HongqiNormalBody
+    title={}, author={}, kicker={}, style=normal,
+    kicker-font=hei, kicker-align=center,
+    kicker-width=.72\textwidth, kicker-padding=3pt,
+    kicker-rule=.8pt, kicker-after=8mm,
+    body-indent=2em,
+    #1
   }
-  { \par\group_end: }
+  \hongqi_print_article_heading:
+  \hongqi_apply_article_body:
+}
+{ \par\group_end: }
 \ExplSyntaxOff
 
 \NewDocumentCommand\HongqiSubheading{m}{%
   \par\addvspace{.75\baselineskip}%
   {\hongqihei\bfseries #1\par}%
   \nobreak\vspace{.2\baselineskip}%
+}
+
+% 正文中的毛主席语录：继承当前字号和行距，仅切换为粗黑体。
+\NewDocumentCommand\yulu{m}{{\hongqihei\bfseries #1}}
+
+% 避免“毛主席”三个字跨行拆分。
+\NewDocumentCommand{\maozhuxi}{}{%
+  \mbox{毛主席}%
 }
 
 \NewDocumentCommand\HongqiDocumentAgencies{m}{%
@@ -79,19 +224,19 @@
 }
 
 \NewDocumentEnvironment{hongqisloganpage}{}
-  {\clearpage\thispagestyle{empty}\HongqiLargeBody\begin{center}\vspace*{18mm}}
-  {\end{center}\clearpage}
+{\clearpage\thispagestyle{empty}\HongqiLargeBody\begin{center}\vspace*{18mm}}
+    {\end{center}\clearpage}
 
 \NewDocumentCommand\HongqiSloganBox{m}{%
   \fboxrule=1.6pt
   \fboxsep=10mm
   \fbox{\parbox{.68\textwidth}{%
-    \centering\hongqihei\bfseries\fontsize{18pt}{32pt}\selectfont #1}}
+      \centering\hongqihei\bfseries\fontsize{18pt}{32pt}\selectfont #1}}
 }
 
 \NewDocumentEnvironment{hongqitoc}{}
-  {\clearpage\thispagestyle{empty}\HongqiCompactBody}
-  {\clearpage}
+{\clearpage\thispagestyle{empty}\HongqiCompactBody}
+{\clearpage}
 
 \NewDocumentCommand\HongqiTocHeading{}{%
   \begin{center}
@@ -105,12 +250,12 @@
 }
 
 \NewDocumentCommand\HongqiTocEntry{O{}mm}{%
-  \par\noindent
-  \if\relax\detokenize{#1}\relax\else
-    {\hongqisong\fontsize{8.5pt}{11pt}\selectfont #1\par\nobreak}
-  \fi
-  {\hongqisong\bfseries\fontsize{12pt}{16pt}\selectfont
-    #2\nobreak\leaders\hbox to .7em{\hss.\hss}\hfill\nobreak
-    \makebox[3em][r]{（#3）}\par}
-  \vspace{2mm}
+\par\noindent
+\if\relax\detokenize{#1}\relax\else
+  {\hongqisong\fontsize{8.5pt}{11pt}\selectfont #1\par\nobreak}
+\fi
+{\hongqisong\bfseries\fontsize{12pt}{16pt}\selectfont
+#2\nobreak\leaders\hbox to .7em{\hss.\hss}\hfill\nobreak
+\makebox[3em][r]{（#3）}\par}
+\vspace{2mm}
 }
