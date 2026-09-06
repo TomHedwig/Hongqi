@@ -41,3 +41,5 @@
 可用字号名依次为：`chuhao`、`xiaochu`、`yihao`、`xiaoyi`、`erhao`、`xiaoer`、`sanhao`、`xiaosan`、`sihao`、`xiaosi`、`wuhao`、`xiaowu`、`liuhao`、`xiaoliu`、`qihao`、`bahao`。
 
 正文中的毛主席语录使用 `\yulu{语录文字}`。该命令继承所在正文的字号和行距，只将文字切换为项目黑体并加粗。
+
+需要禁止跨行拆分的短语使用 `\keep{短语}`，例如 `\keep{毛主席}`。该命令不改变字体和字号，不宜包裹过长文字。

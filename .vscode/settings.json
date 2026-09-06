@@ -1,0 +1,31 @@
+{
+  "latex-workshop.docker.enabled": false,
+  "latex-workshop.latex.tools": [
+    {
+      "name": "hongqi-docker-xelatex",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "%WORKSPACE_FOLDER%/scripts/build-docker.ps1",
+        "-ProjectRoot",
+        "%WORKSPACE_FOLDER%",
+        "-Document",
+        "%DOC%",
+        "-Image",
+        "texlive/texlive"
+      ]
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "Hongqi Docker XeLaTeX",
+      "tools": ["hongqi-docker-xelatex"]
+    }
+  ],
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.outDir": "%DIR%"
+}

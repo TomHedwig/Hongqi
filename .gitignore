@@ -22,6 +22,4 @@
 *.dvi
 *.ps
 
-.vscode/
-
 scans/**/*.pdf

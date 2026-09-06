@@ -211,10 +211,8 @@
 % 正文中的毛主席语录：继承当前字号和行距，仅切换为粗黑体。
 \NewDocumentCommand\yulu{m}{{\hongqihei\bfseries #1}}
 
-% 避免“毛主席”三个字跨行拆分。
-\NewDocumentCommand{\maozhuxi}{}{%
-  \mbox{毛主席}%
-}
+% 保持较短的专名或词组完整，不在行末拆分。
+\NewDocumentCommand{\keep}{m}{\mbox{#1}}
 
 \NewDocumentCommand\HongqiDocumentAgencies{m}{%
   \begin{center}
